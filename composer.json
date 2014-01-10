@@ -19,7 +19,7 @@
         },
         {
             "name": "Dave Nash",
-            "homepage": "dave.nash@teaandcode.com"
+            "email": "dave.nash@teaandcode.com"
         }
     ],
     "autoload": {
