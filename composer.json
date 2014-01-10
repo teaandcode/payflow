@@ -7,19 +7,19 @@
         "merchant",
         "omnipay",
         "pay",
-        "payflow",
+        "worldpay",
         "payment"
     ],
     "homepage": "https://github.com/teaandcode/worldpay-xml",
     "license": "MIT",
     "authors": [
         {
-            "name": "Adrian Macneil",
-            "email": "adrian@adrianmacneil.com"
-        },
-        {
             "name": "Dave Nash",
             "email": "dave.nash@teaandcode.com"
+        },
+        {
+            "name": "Adrian Macneil",
+            "email": "adrian@adrianmacneil.com"
         }
     ],
     "autoload": {

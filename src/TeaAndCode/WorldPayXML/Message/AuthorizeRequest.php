@@ -9,8 +9,8 @@ use Omnipay\Common\Message\AbstractRequest;
  */
 class AuthorizeRequest extends AbstractRequest
 {
-    protected $liveEndpoint = 'https://payflowpro.paypal.com';
-    protected $testEndpoint = 'https://pilot-payflowpro.paypal.com';
+    protected $liveEndpoint = 'https://secure-test.worldpay.com/jsp/merchant/xml/paymentService.jsp';
+    protected $testEndpoint = 'https://secure.worldpay.com/jsp/merchant/xml/paymentService.jsp';
     protected $action = 'A';
 
     public function getUsername()
