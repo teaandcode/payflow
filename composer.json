@@ -1,7 +1,7 @@
 {
-    "name": "omnipay/payflow",
+    "name": "tea-and-code/worldpay-xml",
     "type": "library",
-    "description": "Payflow driver for the Omnipay payment processing library",
+    "description": "WorldPay XML driver for the Omnipay payment processing library",
     "keywords": [
         "gateway",
         "merchant",
@@ -10,7 +10,7 @@
         "payflow",
         "payment"
     ],
-    "homepage": "https://github.com/omnipay/payflow",
+    "homepage": "https://github.com/teaandcode/worldpay-xml",
     "license": "MIT",
     "authors": [
         {
@@ -18,12 +18,12 @@
             "email": "adrian@adrianmacneil.com"
         },
         {
-            "name": "Omnipay Contributors",
-            "homepage": "https://github.com/omnipay/payflow/contributors"
+            "name": "Dave Nash",
+            "homepage": "dave.nash@teaandcode.com"
         }
     ],
     "autoload": {
-        "psr-0": { "Omnipay\\Payflow\\" : "src/" }
+        "psr-0": { "TeaAndCode\\WorldPayXML\\" : "src/" }
     },
     "require": {
         "omnipay/common": "~2.0"
@@ -33,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "1.0.x-dev"
         }
     }
 }
