@@ -27,6 +27,16 @@ class Gateway extends AbstractGateway
         );
     }
 
+    public function getAcceptHeader()
+    {
+        return $this->getParameter('acceptHeader');
+    }
+
+    public function setAcceptHeader($value)
+    {
+        return $this->setParameter('acceptHeader', $value);
+    }
+
     public function getInstallation()
     {
         return $this->getParameter('installation');
@@ -57,16 +67,6 @@ class Gateway extends AbstractGateway
         return $this->setParameter('password', $value);
     }
 
-    public function getIP()
-    {
-        return $this->getParameter('ip');
-    }
-
-    public function setIP($value)
-    {
-        return $this->setParameter('ip', $value);
-    }
-
     public function getSession()
     {
         return $this->getParameter('session');
@@ -75,6 +75,26 @@ class Gateway extends AbstractGateway
     public function setSession($value)
     {
         return $this->setParameter('session', $value);
+    }
+
+    public function getUserAgentHeader()
+    {
+        return $this->getParameter('userAgentHeader');
+    }
+
+    public function setUserAgentHeader($value)
+    {
+        return $this->setParameter('userAgentHeader', $value);
+    }
+
+    public function getUserIP()
+    {
+        return $this->getParameter('userIP');
+    }
+
+    public function setUserIP($value)
+    {
+        return $this->setParameter('userIP', $value);
     }
 
     public function purchase(array $parameters = array())
