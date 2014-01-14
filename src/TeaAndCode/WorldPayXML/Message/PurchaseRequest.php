@@ -188,6 +188,21 @@ class PurchaseRequest extends AbstractRequest
             ->post($this->getEndpoint(), $headers, $document->saveXML())
             ->send();
 
+        $dom = new DOMDocument;
+        $dom->loadXML($httpResponse->getBody());
+
+        $xml = simplexml_import_dom(
+            $dom->documentElement->firstChild->firstChild
+        );
+
+        if (isset($xml->requestInfo->request3DSecure->issuerURL))
+        {
+            return $this->response = new RedirectResponse(
+                $this,
+                $httpResponse->getBody()
+            );
+        }
+
         return $this->response = new Response($this, $httpResponse->getBody());
     }
 
