@@ -195,22 +195,22 @@ class PurchaseRequest extends AbstractRequest
 
 error_log(print_r($cookiePlugin->getCookieJar(), true));
 
-        $dom = new \DOMDocument;
-        $dom->loadXML($httpResponse->getBody());
+//        $dom = new \DOMDocument;
+//        $dom->loadXML($httpResponse->getBody());
 
-        $xml = simplexml_import_dom(
-            $dom->documentElement->firstChild->firstChild
-        );
+//        $xml = simplexml_import_dom(
+//            $dom->documentElement->firstChild->firstChild
+//        );
 
-        if (isset($xml->requestInfo->request3DSecure->issuerURL))
-        {
+//        if (isset($xml->requestInfo->request3DSecure->issuerURL))
+//        {
             return $this->response = new RedirectResponse(
                 $this,
                 $httpResponse->getBody()
             );
-        }
+//        }
 
-        return $this->response = new Response($this, $httpResponse->getBody());
+//        return $this->response = new Response($this, $httpResponse->getBody());
     }
 
     protected function getEndpoint()
