@@ -2,10 +2,10 @@
 
 namespace TeaAndCode\WorldPayXML\Message;
 
-use DOMDocument;
+use Guzzle\Plugin\Cookie\CookiePlugin;
+use Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractRequest;
-use SimpleXMLElement;
 
 /**
  * WorldPay XML Purchase Request
@@ -92,7 +92,7 @@ class PurchaseRequest extends AbstractRequest
         $this->validate('amount', 'card');
         $this->getCard()->validate();
 
-        $data = new SimpleXMLElement('<paymentService />');
+        $data = new \SimpleXMLElement('<paymentService />');
         $data->addAttribute('version', self::VERSION);
         $data->addAttribute('merchantCode', $this->getMerchant());
 
@@ -184,11 +184,18 @@ class PurchaseRequest extends AbstractRequest
             'Content-Type'  => 'text/xml; charset=utf-8'
         );
 
+        $cookieJar    = new ArrayCookieJar();
+        $cookiePlugin = new CookiePlugin($cookieJar);
+
+        $this->httpClient->addSubscriber($cookiePlugin);
+
         $httpResponse = $this->httpClient
             ->post($this->getEndpoint(), $headers, $document->saveXML())
             ->send();
 
-        $dom = new DOMDocument;
+error_log(print_r($cookiePlugin->getCookieJar(), true));
+
+        $dom = new \DOMDocument;
         $dom->loadXML($httpResponse->getBody());
 
         $xml = simplexml_import_dom(
