@@ -9,11 +9,29 @@ use Omnipay\Common\Message\RedirectResponseInterface;
  */
 class RedirectResponse extends Response implements RedirectResponseInterface
 {
+    public function getRedirectCookie()
+    {
+        $cookieJar = $this->request->getCookiePlugin()->getCookieJar();
+
+        foreach ($cookieJar->all() as $cookie)
+        {
+            if ($cookie->getName() == 'machine')
+            {
+                return $cookie->getValue();
+            }
+        }
+    }
+
+    public function getRedirectEcho()
+    {
+        return $this->data->echoData;
+    }
+
     public function getRedirectData()
     {
         return array(
             'PaReq'   => $this->data->requestInfo->request3DSecure->paRequest,
-            'TermUrl' => 'http://www.davenash.com' // This must be changed!
+            'TermUrl' => $this->request->getTermUrl()
         );
     }
 

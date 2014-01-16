@@ -2,6 +2,7 @@
 
 namespace TeaAndCode\WorldPayXML\Message;
 
+use Guzzle\Plugin\Cookie\Cookie;
 use Guzzle\Plugin\Cookie\CookiePlugin;
 use Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar;
 use Omnipay\Common\CreditCard;
@@ -17,6 +18,8 @@ class PurchaseRequest extends AbstractRequest
 
     const VERSION = '1.4';
 
+    protected $cookiePlugin;
+
     public function getAcceptHeader()
     {
         return $this->getParameter('acceptHeader');
@@ -25,6 +28,11 @@ class PurchaseRequest extends AbstractRequest
     public function setAcceptHeader($value)
     {
         return $this->setParameter('acceptHeader', $value);
+    }
+
+    public function getCookiePlugin()
+    {
+        return $this->cookiePlugin;
     }
 
     public function getInstallation()
@@ -47,6 +55,16 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('merchant', $value);
     }
 
+    public function getPaResponse()
+    {
+        return $this->getParameter('pa_response');
+    }
+
+    public function setPaResponse($value)
+    {
+        return $this->setParameter('pa_response', $value);
+    }
+
     public function getPassword()
     {
         return $this->getParameter('password');
@@ -57,6 +75,26 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('password', $value);
     }
 
+    public function getRedirectCookie()
+    {
+        return $this->getParameter('redirect_cookie');
+    }
+
+    public function setRedirectCookie($value)
+    {
+        return $this->setParameter('redirect_cookie', $value);
+    }
+
+    public function getRedirectEcho()
+    {
+        return $this->getParameter('redirect_echo');
+    }
+
+    public function setRedirectEcho($value)
+    {
+        return $this->setParameter('redirect_echo', $value);
+    }
+
     public function getSession()
     {
         return $this->getParameter('session');
@@ -65,6 +103,16 @@ class PurchaseRequest extends AbstractRequest
     public function setSession($value)
     {
         return $this->setParameter('session', $value);
+    }
+
+    public function getTermUrl()
+    {
+        return $this->getParameter('termUrl');
+    }
+
+    public function setTermUrl($value)
+    {
+        return $this->setParameter('termUrl', $value);
     }
 
     public function getUserAgentHeader()
@@ -149,12 +197,27 @@ class PurchaseRequest extends AbstractRequest
         $session->addAttribute('shopperIPAddress', $this->getUserIP());
         $session->addAttribute('id', $this->getSession());
 
+        $paResponse = $this->getPaResponse();
+
+        if (!empty($paResponse))
+        {
+            $info3DSecure = $payment->addChild('info3DSecure');
+            $info3DSecure->addChild('paResponse', $paResponse);
+        }
+
         $shopper = $order->addChild('shopper');
         $shopper->addChild('shopperEmailAddress', $this->getCard()->getEmail());
 
         $browser = $shopper->addChild('browser');
         $browser->addChild('acceptHeader', $this->getAcceptHeader());
         $browser->addChild('userAgentHeader', $this->getUserAgentHeader());
+
+        $echoData = $this->getRedirectEcho();
+
+        if (!empty($echoData))
+        {
+            $order->addChild('echoData', $echoData);
+        }
 
         return $data;
     }
@@ -184,16 +247,32 @@ class PurchaseRequest extends AbstractRequest
             'Content-Type'  => 'text/xml; charset=utf-8'
         );
 
-        $cookieJar    = new ArrayCookieJar();
-        $cookiePlugin = new CookiePlugin($cookieJar);
 
-        $this->httpClient->addSubscriber($cookiePlugin);
+        $cookieJar = new ArrayCookieJar();
 
+        $redirectCookie = $this->getRedirectCookie();
+
+        if (!empty($redirectCookie))
+        {
+            $cookieJar->add(
+                new Cookie(
+                    array(
+                        'name'  => 'machine',
+                        'value' => $redirectCookie
+                    )
+                )
+            );
+        }
+
+        $this->cookiePlugin = new CookiePlugin($cookieJar);
+
+        $this->httpClient->addSubscriber($this->cookiePlugin);
+
+        $xml = $document->saveXML();
+error_log(print_r($xml, true));
         $httpResponse = $this->httpClient
-            ->post($this->getEndpoint(), $headers, $document->saveXML())
+            ->post($this->getEndpoint(), $headers, $xml)
             ->send();
-
-error_log(print_r($cookiePlugin->getCookieJar(), true));
 
 //        $dom = new \DOMDocument;
 //        $dom->loadXML($httpResponse->getBody());
