@@ -57,6 +57,16 @@ class Gateway extends AbstractGateway
         return $this->setParameter('merchant', $value);
     }
 
+    public function getPaResponse()
+    {
+        return $this->getParameter('pa_response');
+    }
+
+    public function setPaResponse($value)
+    {
+        return $this->setParameter('pa_response', $value);
+    }
+
     public function getPassword()
     {
         return $this->getParameter('password');
@@ -65,6 +75,26 @@ class Gateway extends AbstractGateway
     public function setPassword($value)
     {
         return $this->setParameter('password', $value);
+    }
+
+    public function getRedirectCookie()
+    {
+        return $this->getParameter('redirect_cookie');
+    }
+
+    public function setRedirectCookie($value)
+    {
+        return $this->setParameter('redirect_cookie', $value);
+    }
+
+    public function getRedirectEcho()
+    {
+        return $this->getParameter('redirect_echo');
+    }
+
+    public function setRedirectEcho($value)
+    {
+        return $this->setParameter('redirect_echo', $value);
     }
 
     public function getSession()
