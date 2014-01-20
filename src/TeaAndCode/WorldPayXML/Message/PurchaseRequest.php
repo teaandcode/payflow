@@ -206,7 +206,16 @@ class PurchaseRequest extends AbstractRequest
         }
 
         $shopper = $order->addChild('shopper');
-        $shopper->addChild('shopperEmailAddress', $this->getCard()->getEmail());
+
+        $email = $this->getCard()->getEmail();
+
+        if (!empty($email))
+        {
+            $shopper->addChild(
+                'shopperEmailAddress',
+                $this->getCard()->getEmail()
+            );
+        }
 
         $browser = $shopper->addChild('browser');
         $browser->addChild('acceptHeader', $this->getAcceptHeader());
