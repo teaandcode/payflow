@@ -158,34 +158,39 @@ class PurchaseRequest extends AbstractRequest
         $payment = $order->addChild('paymentDetails');
 
         $codes = array(
-            CreditCard::BRAND_VISA        => 'VISA-SSL',
-            CreditCard::BRAND_MASTERCARD  => 'ECMC-SSL',
-            CreditCard::BRAND_DISCOVER    => 'DISCOVER-SSL',
             CreditCard::BRAND_AMEX        => 'AMEX-SSL',
-            CreditCard::BRAND_DINERS_CLUB => 'DINERS-SSL',
-            CreditCard::BRAND_JCB         => 'JCB-SSL',
             CreditCard::BRAND_DANKORT     => 'DANKORT-SSL',
+            CreditCard::BRAND_DINERS_CLUB => 'DINERS-SSL',
+            CreditCard::BRAND_DISCOVER    => 'DISCOVER-SSL',
+            CreditCard::BRAND_JCB         => 'JCB-SSL',
+            CreditCard::BRAND_LASER       => 'LASER-SSL',
             CreditCard::BRAND_MAESTRO     => 'MAESTRO-SSL',
-            CreditCard::BRAND_LASER       => 'LASER-SSL'
+            CreditCard::BRAND_MASTERCARD  => 'ECMC-SSL',
+            CreditCard::BRAND_SWITCH      => 'MAESTRO-SSL',
+            CreditCard::BRAND_VISA        => 'VISA-SSL'
         );
 
         $card = $payment->addChild($codes[$this->getCard()->getBrand()]);
         $card->addChild('cardNumber', $this->getCard()->getNumber());
-
-        if ($this->getCard()->getBrand() == CreditCard::BRAND_MAESTRO)
-        {
-            $card->addChild('issueNumber', $this->getCard()->getIssueNumber());
-
-            $start = $card->addChild('startDate')->addChild('date');
-            $start->addAttribute('month', $this->getCard()->getStartDate('m'));
-            $start->addAttribute('year', $this->getCard()->getStartDate('Y'));
-        }
 
         $expiry = $card->addChild('expiryDate')->addChild('date');
         $expiry->addAttribute('month', $this->getCard()->getExpiryDate('m'));
         $expiry->addAttribute('year', $this->getCard()->getExpiryDate('Y'));
 
         $card->addChild('cardHolderName', $this->getCard()->getName());
+
+        if (
+                $this->getCard()->getBrand() == CreditCard::BRAND_MAESTRO
+             || $this->getCard()->getBrand() == CreditCard::BRAND_SWITCH
+        )
+        {
+            $start = $card->addChild('startDate')->addChild('date');
+            $start->addAttribute('month', $this->getCard()->getStartDate('m'));
+            $start->addAttribute('year', $this->getCard()->getStartDate('Y'));
+
+            $card->addChild('issueNumber', $this->getCard()->getIssueNumber());
+        }
+
         $card->addChild('cvc', $this->getCard()->getCvv());
 
         $address = $card->addChild('cardAddress')->addChild('address');
@@ -263,11 +268,15 @@ class PurchaseRequest extends AbstractRequest
 
         if (!empty($redirectCookie))
         {
+            $url = parse_url($this->getEndpoint());
+
             $cookieJar->add(
                 new Cookie(
                     array(
-                        'name'  => 'machine',
-                        'value' => $redirectCookie
+                        'domain' => $url['host'],
+                        'name'   => 'machine',
+                        'path'   => '/',
+                        'value'  => $redirectCookie
                     )
                 )
             );
@@ -278,27 +287,15 @@ class PurchaseRequest extends AbstractRequest
         $this->httpClient->addSubscriber($this->cookiePlugin);
 
         $xml = $document->saveXML();
-error_log(print_r($xml, true));
+
         $httpResponse = $this->httpClient
             ->post($this->getEndpoint(), $headers, $xml)
             ->send();
 
-//        $dom = new \DOMDocument;
-//        $dom->loadXML($httpResponse->getBody());
-
-//        $xml = simplexml_import_dom(
-//            $dom->documentElement->firstChild->firstChild
-//        );
-
-//        if (isset($xml->requestInfo->request3DSecure->issuerURL))
-//        {
-            return $this->response = new RedirectResponse(
-                $this,
-                $httpResponse->getBody()
-            );
-//        }
-
-//        return $this->response = new Response($this, $httpResponse->getBody());
+        return $this->response = new RedirectResponse(
+            $this,
+            $httpResponse->getBody()
+        );
     }
 
     protected function getEndpoint()

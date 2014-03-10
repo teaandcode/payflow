@@ -17,7 +17,7 @@ class Response extends AbstractResponse
     public function __construct(RequestInterface $request, $data)
     {
         $this->request = $request;
-error_log(print_r((string) $data, true));
+
         $responseDom = new DOMDocument;
         $responseDom->loadXML($data);
 
