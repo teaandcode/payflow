@@ -1,9 +1,9 @@
 # Omnipay: WorldPay XML
 
-**WorldPay XML driver for the Omnipay PHP payment processing library**
+**WorldPay XML Direct driver for the Omnipay PHP payment processing library**
 
 [Omnipay](https://github.com/omnipay/omnipay) is a framework agnostic, multi-gateway payment
-processing library for PHP 5.3+. This package implements Payflow support for Omnipay.
+processing library for PHP 5.3+. This package implements WorldPay XML Direct support for Omnipay.
 
 ## Installation
 
