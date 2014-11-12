@@ -7,134 +7,308 @@ use Guzzle\Plugin\Cookie\CookiePlugin;
 use Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractRequest;
+use TeaAndCode\WorldPayXML\Message\RedirectResponse;
 
 /**
  * WorldPay XML Purchase Request
  */
 class PurchaseRequest extends AbstractRequest
 {
-    const EP_LIVE = 'https://secure.worldpay.com/jsp/merchant/xml/paymentService.jsp';
-    const EP_TEST = 'https://secure-test.worldpay.com/jsp/merchant/xml/paymentService.jsp';
+    const EP_HOST_LIVE = 'https://secure.worldpay.com';
+    const EP_HOST_TEST = 'https://secure-test.worldpay.com';
+
+    const EP_PATH = '/jsp/merchant/xml/paymentService.jsp';
 
     const VERSION = '1.4';
 
+    /**
+     * @var \Guzzle\Plugin\Cookie\CookiePlugin
+     *
+     * @access protected
+     */
     protected $cookiePlugin;
 
+    /**
+     * Get accept header
+     *
+     * @access public
+     * @return string
+     */
     public function getAcceptHeader()
     {
         return $this->getParameter('acceptHeader');
     }
 
+    /**
+     * Set accept header
+     *
+     * @param string $value Accept header
+     *
+     * @access public
+     * @return void
+     */
     public function setAcceptHeader($value)
     {
         return $this->setParameter('acceptHeader', $value);
     }
 
+    /**
+     * Get cookie plugin
+     *
+     * @access public
+     * @return \Guzzle\Plugin\Cookie\CookiePlugin
+     */
     public function getCookiePlugin()
     {
         return $this->cookiePlugin;
     }
 
+    /**
+     * Get installation
+     *
+     * @access public
+     * @return string
+     */
     public function getInstallation()
     {
         return $this->getParameter('installation');
     }
 
+    /**
+     * Set installation
+     *
+     * @param string $value Installation
+     *
+     * @access public
+     * @return void
+     */
     public function setInstallation($value)
     {
         return $this->setParameter('installation', $value);
     }
 
+    /**
+     * Get merchant
+     *
+     * @access public
+     * @return string
+     */
     public function getMerchant()
     {
         return $this->getParameter('merchant');
     }
 
+    /**
+     * Set merchant
+     *
+     * @param string $value Merchant
+     *
+     * @access public
+     * @return void
+     */
     public function setMerchant($value)
     {
         return $this->setParameter('merchant', $value);
     }
 
+    /**
+     * Get pa response
+     *
+     * @access public
+     * @return string
+     */
     public function getPaResponse()
     {
         return $this->getParameter('pa_response');
     }
 
+    /**
+     * Set pa response
+     *
+     * @param string $value Pa response
+     *
+     * @access public
+     * @return void
+     */
     public function setPaResponse($value)
     {
         return $this->setParameter('pa_response', $value);
     }
 
+    /**
+     * Get password
+     *
+     * @access public
+     * @return string
+     */
     public function getPassword()
     {
         return $this->getParameter('password');
     }
 
+    /**
+     * Set password
+     *
+     * @param string $value Password
+     *
+     * @access public
+     * @return void
+     */
     public function setPassword($value)
     {
         return $this->setParameter('password', $value);
     }
 
+    /**
+     * Get redirect cookie
+     *
+     * @access public
+     * @return string
+     */
     public function getRedirectCookie()
     {
         return $this->getParameter('redirect_cookie');
     }
 
+    /**
+     * Set redirect cookie
+     *
+     * @param string $value Password
+     *
+     * @access public
+     * @return void
+     */
     public function setRedirectCookie($value)
     {
         return $this->setParameter('redirect_cookie', $value);
     }
 
+    /**
+     * Get redirect echo
+     *
+     * @access public
+     * @return string
+     */
     public function getRedirectEcho()
     {
         return $this->getParameter('redirect_echo');
     }
 
+    /**
+     * Set redirect echo
+     *
+     * @param string $value Password
+     *
+     * @access public
+     * @return void
+     */
     public function setRedirectEcho($value)
     {
         return $this->setParameter('redirect_echo', $value);
     }
 
+    /**
+     * Get session
+     *
+     * @access public
+     * @return string
+     */
     public function getSession()
     {
         return $this->getParameter('session');
     }
 
+    /**
+     * Set session
+     *
+     * @param string $value Session
+     *
+     * @access public
+     * @return void
+     */
     public function setSession($value)
     {
         return $this->setParameter('session', $value);
     }
 
+    /**
+     * Get term url
+     *
+     * @access public
+     * @return string
+     */
     public function getTermUrl()
     {
         return $this->getParameter('termUrl');
     }
 
+    /**
+     * Set term url
+     *
+     * @param string $value Term url
+     *
+     * @access public
+     * @return void
+     */
     public function setTermUrl($value)
     {
         return $this->setParameter('termUrl', $value);
     }
 
+    /**
+     * Get user agent header
+     *
+     * @access public
+     * @return string
+     */
     public function getUserAgentHeader()
     {
         return $this->getParameter('userAgentHeader');
     }
 
+    /**
+     * Set user agent header
+     *
+     * @param string $value User agent header
+     *
+     * @access public
+     * @return void
+     */
     public function setUserAgentHeader($value)
     {
         return $this->setParameter('userAgentHeader', $value);
     }
 
+    /**
+     * Get user ip
+     *
+     * @access public
+     * @return string
+     */
     public function getUserIP()
     {
         return $this->getParameter('userIP');
     }
 
+    /**
+     * Set user ip
+     *
+     * @param string $value User ip
+     *
+     * @access public
+     * @return void
+     */
     public function setUserIP($value)
     {
         return $this->setParameter('userIP', $value);
     }
 
+    /**
+     * Get data
+     *
+     * @access public
+     * @return \SimpleXMLElement
+     */
     public function getData()
     {
         $this->validate('amount', 'card');
@@ -182,8 +356,7 @@ class PurchaseRequest extends AbstractRequest
         if (
                 $this->getCard()->getBrand() == CreditCard::BRAND_MAESTRO
              || $this->getCard()->getBrand() == CreditCard::BRAND_SWITCH
-        )
-        {
+        ) {
             $start = $card->addChild('startDate')->addChild('date');
             $start->addAttribute('month', $this->getCard()->getStartDate('m'));
             $start->addAttribute('year', $this->getCard()->getStartDate('Y'));
@@ -204,8 +377,7 @@ class PurchaseRequest extends AbstractRequest
 
         $paResponse = $this->getPaResponse();
 
-        if (!empty($paResponse))
-        {
+        if (!empty($paResponse)) {
             $info3DSecure = $payment->addChild('info3DSecure');
             $info3DSecure->addChild('paResponse', $paResponse);
         }
@@ -214,8 +386,7 @@ class PurchaseRequest extends AbstractRequest
 
         $email = $this->getCard()->getEmail();
 
-        if (!empty($email))
-        {
+        if (!empty($email)) {
             $shopper->addChild(
                 'shopperEmailAddress',
                 $this->getCard()->getEmail()
@@ -228,14 +399,21 @@ class PurchaseRequest extends AbstractRequest
 
         $echoData = $this->getRedirectEcho();
 
-        if (!empty($echoData))
-        {
+        if (!empty($echoData)) {
             $order->addChild('echoData', $echoData);
         }
 
         return $data;
     }
 
+    /**
+     * Send data
+     *
+     * @param \SimpleXMLElement $data Data
+     *
+     * @access public
+     * @return \TeaAndCode\WorldPayXML\Message\RedirectResponse
+     */
     public function sendData($data)
     {
         $implementation = new \DOMImplementation();
@@ -261,13 +439,11 @@ class PurchaseRequest extends AbstractRequest
             'Content-Type'  => 'text/xml; charset=utf-8'
         );
 
-
         $cookieJar = new ArrayCookieJar();
 
         $redirectCookie = $this->getRedirectCookie();
 
-        if (!empty($redirectCookie))
-        {
+        if (!empty($redirectCookie)) {
             $url = parse_url($this->getEndpoint());
 
             $cookieJar->add(
@@ -298,13 +474,21 @@ class PurchaseRequest extends AbstractRequest
         );
     }
 
+    /**
+     * Get endpoint
+     *
+     * Returns endpoint depending on test mode
+     *
+     * @access protected
+     * @return string
+     */
     protected function getEndpoint()
     {
         if ($this->getTestMode())
         {
-            return self::EP_TEST;
+            return self::EP_HOST_TEST . self::EP_PATH;
         }
 
-        return self::EP_LIVE;
+        return self::EP_HOST_LIVE . self::EP_PATH;
     }
 }

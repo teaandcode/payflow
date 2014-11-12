@@ -1,8 +1,9 @@
 <?php
 
-namespace Omnipay\Payflow\Message;
+namespace TeaAndCode\WorldPayXML\Message;
 
 use Omnipay\Tests\TestCase;
+use TeaAndCode\WorldPayXML\Message\Response;
 
 class ResponseTest extends TestCase
 {
@@ -21,8 +22,8 @@ class ResponseTest extends TestCase
 
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
-        $this->assertEquals('V19R3EF62FBE', $response->getTransactionReference());
-        $this->assertEquals('Approved', $response->getMessage());
+        $this->assertEquals('T0211010', $response->getTransactionReference());
+        $this->assertEquals('AUTHORISED', $response->getMessage());
     }
 
     public function testPurchaseFailure()
@@ -33,6 +34,6 @@ class ResponseTest extends TestCase
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
         $this->assertNull($response->getTransactionReference());
-        $this->assertSame('User authentication failed', $response->getMessage());
+        $this->assertSame('CARD EXPIRED', $response->getMessage());
     }
 }

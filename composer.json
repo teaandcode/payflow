@@ -26,6 +26,7 @@
         "psr-0": { "TeaAndCode\\WorldPayXML\\" : "src/" }
     },
     "require": {
+        "guzzle/plugin-cookie": "~3.9",
         "omnipay/common": "~2.0"
     },
     "require-dev": {
