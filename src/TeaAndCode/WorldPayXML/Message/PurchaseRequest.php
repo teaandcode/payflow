@@ -484,8 +484,7 @@ class PurchaseRequest extends AbstractRequest
      */
     protected function getEndpoint()
     {
-        if ($this->getTestMode())
-        {
+        if ($this->getTestMode()) {
             return self::EP_HOST_TEST . self::EP_PATH;
         }
 
