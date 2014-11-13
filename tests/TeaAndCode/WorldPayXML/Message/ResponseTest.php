@@ -18,7 +18,10 @@ class ResponseTest extends TestCase
     public function testPurchaseSuccess()
     {
         $httpResponse = $this->getMockHttpResponse('PurchaseSuccess.txt');
-        $response = new Response($this->getMockRequest(), $httpResponse->getBody());
+        $response = new Response(
+            $this->getMockRequest(),
+            $httpResponse->getBody()
+        );
 
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
@@ -29,11 +32,14 @@ class ResponseTest extends TestCase
     public function testPurchaseFailure()
     {
         $httpResponse = $this->getMockHttpResponse('PurchaseFailure.txt');
-        $response = new Response($this->getMockRequest(), $httpResponse->getBody());
+        $response = new Response(
+            $this->getMockRequest(),
+            $httpResponse->getBody()
+        );
 
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isRedirect());
-        $this->assertNull($response->getTransactionReference());
+        $this->assertEquals('T0211234', $response->getTransactionReference());
         $this->assertSame('CARD EXPIRED', $response->getMessage());
     }
 }

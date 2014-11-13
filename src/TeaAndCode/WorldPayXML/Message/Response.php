@@ -125,14 +125,8 @@ class Response extends AbstractResponse
         $attributes = $this->data->attributes();
 
         if (isset($attributes['orderCode'])) {
-            if (
-                $this->request->getTransactionId() == $attributes['orderCode']
-            ) {
-                return $attributes['orderCode'];
-            }
+            return $attributes['orderCode'];
         }
-
-        return '';
     }
 
     /**
