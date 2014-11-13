@@ -4,9 +4,7 @@ namespace TeaAndCode\WorldPayXML\Message;
 
 use DOMDocument;
 use Omnipay\Common\Exception\InvalidResponseException;
-use Omnipay\Common\Exception\RuntimeException;
 use Omnipay\Common\Message\AbstractResponse;
-use Omnipay\Common\Message\RedirectResponseInterface;
 use Omnipay\Common\Message\RequestInterface;
 
 /**
@@ -26,6 +24,10 @@ class Response extends AbstractResponse
     public function __construct(RequestInterface $request, $data)
     {
         $this->request = $request;
+
+        if (empty($data)) {
+            throw new InvalidResponseException();
+        }
 
         $responseDom = new DOMDocument;
         $responseDom->loadXML($data);
